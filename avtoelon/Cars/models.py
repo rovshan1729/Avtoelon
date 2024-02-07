@@ -18,12 +18,40 @@ REGION_CHOICES = [
 ]
 
 
+CAR_BRANDS = (
+    ('Toyota', 'toyota_choices'),
+    ('Honda', 'honda_choices'),
+    ('Nissan', 'nissan_choices'),
+    ('BMW', 'bmw_choices'),
+    ('MercedesBenz', 'mercedes_benz_choices'),
+    ('Audi', 'audi_choices'),
+    ('Volkswagen', 'volkswagen_choices'),
+    ('Lexus', 'lexus_choices'),
+    ('Subaru', 'subaru_choices'),
+    ('Mazda', 'mazda_choices'),
+    ('Ford', 'ford_choices'),
+    ('Chevrolet', 'chevrolet_choices'),
+)
+
+
 TYPE_OF_WATER_TRANSPORTS = [
     ('GIDRO', 'гидроцикл'),
     ('KATER', 'катер'),
     ('BOAT', 'лодка'),
     ('YAXTA', 'яхта'),
     ('ENGINE', 'лодочный мотор,двигатель')
+]
+
+TYPE_OF_MOTORCYCLES = [
+    ('MOTO','мотоцикл'),
+    ('MOPED','мопед'),
+    ('SKUTER','скутер'),
+    ('KVADRO','квадроцикл'),
+    ('SNEGOXOD','снегоход'),
+    ('PERSONAL','персональный транспортер'),
+    ('AUTOPARTS','запчасти'),
+    ('EQUIPMENT','экипировка'),
+    ('OTHER','другой'),
 ]
 
 
@@ -34,29 +62,26 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-class Region(BaseModel):
-    name = models.CharField(max_length=2, choices=REGION_CHOICES)
 
-    def __str__(self):
-        return dict(REGION_CHOICES).get(self.name, '')
-        
 class WaterTypeCar(BaseModel):
     name = models.CharField(max_length=16, choices=TYPE_OF_WATER_TRANSPORTS)
 
     def __str__(self):
         return dict(TYPE_OF_WATER_TRANSPORTS).get(self.name, '')
-    
+
 
 class Toyota(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
-    
+    year = models.IntegerField(default=0)
+
     def __str__(self):
         return self.title
 
 class Honda(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
+    year = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -64,6 +89,7 @@ class Honda(BaseModel):
 class Nissan(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
+    year = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -71,6 +97,7 @@ class Nissan(BaseModel):
 class BMW(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
+    year = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -78,6 +105,7 @@ class BMW(BaseModel):
 class MercedesBenz(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
+    year = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -85,6 +113,7 @@ class MercedesBenz(BaseModel):
 class Audi(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
+    year = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -92,6 +121,7 @@ class Audi(BaseModel):
 class Volkswagen(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
+    year = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -99,6 +129,7 @@ class Volkswagen(BaseModel):
 class Lexus(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
+    year = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -106,13 +137,15 @@ class Lexus(BaseModel):
 class Subaru(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
-    
+    year = models.IntegerField(default=0)
+
     def __str__(self):
         return self.title
 
 class Mazda(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
+    year = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -120,6 +153,7 @@ class Mazda(BaseModel):
 class Ford(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
+    year = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -127,12 +161,14 @@ class Ford(BaseModel):
 class Chevrolet(BaseModel):
     title = models.CharField(max_length=16)
     car_position = models.CharField(max_length=16, default='не указано')
+    year = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
+
     
-class CarBrands(BaseModel):
-    toyota = models.ForeignKey(Toyota, on_delete=models.CASCADE)
+class CarModel(BaseModel):
+    toyota = models.ForeignKey(Toyota, on_delete=models.CASCADE, related_name='toyota_passenger_cars')
     honda = models.ForeignKey(Honda, on_delete=models.CASCADE, related_name='honda_passenger_cars')
     nissan = models.ForeignKey(Nissan, on_delete=models.CASCADE, related_name='nissan_passenger_cars')
     bmw = models.ForeignKey(BMW, on_delete=models.CASCADE, related_name='bmw_passenger_cars')
@@ -146,10 +182,11 @@ class CarBrands(BaseModel):
     chevrolet = models.ForeignKey(Chevrolet, on_delete=models.CASCADE, related_name='chevrolet_passenger_cars')
 
 
+
 class PassengerCar(BaseModel):
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
-    carbrands = models.ForeignKey(CarBrands, on_delete=models.CASCADE)
-    
+    region = models.CharField(max_length=16, choices=REGION_CHOICES)
+    carbrands = models.CharField(max_length=16, choices=CAR_BRANDS)
+
     car_body = models.CharField(max_length=128)
     drive_unit = models.CharField(max_length=128)
     engine_type = models.CharField(max_length=128)
@@ -161,7 +198,7 @@ class PassengerCar(BaseModel):
     is_bargain = models.BooleanField(default=False)
     is_new = models.BooleanField(default=False)
     is_leasetoown = models.BooleanField(default=False)
-    
+
     price = models.IntegerField(
         validators=[
             MinValueValidator(2500),MaxValueValidator(6500)
@@ -174,11 +211,12 @@ class PassengerCar(BaseModel):
     )
 
 class Motorcycles(BaseModel):
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    region = models.CharField(max_length=16, choices=REGION_CHOICES)
+    motocycles = models.CharField(max_length=16, choices=TYPE_OF_MOTORCYCLES)
 
     search_field = models.TextField()
 
-    is_bargain = models.BooleanField(default=False)    
+    is_bargain = models.BooleanField(default=False)
 
     price = models.IntegerField(
         validators=[
@@ -192,7 +230,7 @@ class Motorcycles(BaseModel):
     )
 
 class WaterTransport(BaseModel):
-    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+    region = models.CharField(max_length=16, choices=REGION_CHOICES)
     water_type_transport = models.ForeignKey(WaterTypeCar, on_delete=models.CASCADE)
 
     search_field = models.TextField()
@@ -210,4 +248,3 @@ class Auto(BaseModel):
     passengercar = models.ForeignKey(PassengerCar, on_delete=models.CASCADE, related_name='passenger_car')
     motorcycles = models.ForeignKey(Motorcycles, on_delete=models.CASCADE, related_name='motor_cycles')
     watertransport = models.ForeignKey(WaterTransport, on_delete=models.CASCADE, related_name='watert_ransport')
-
