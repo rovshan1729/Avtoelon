@@ -38,7 +38,7 @@ class AutoAndAutopart(BaseModel):
     region = models.CharField(max_length=16, choices=REGION_CHOICES)
     condition = models.CharField(max_length=16, choices=CONDITION_CHOICES)
     carbrand = models.CharField(max_length=16, choices=CAR_BRANDS)
-    
+
     carmodel = models.ForeignKey(CarModel, on_delete=models.CASCADE)
 
 
@@ -67,7 +67,7 @@ class Disk(BaseModel):
 
 class Tire(BaseModel):
     search_field = models.TextField()
-    
+
     size_width = models.FloatField()
     size_profile = models.FloatField()
     size_diametr = models.IntegerField()

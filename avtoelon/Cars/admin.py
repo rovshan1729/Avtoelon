@@ -31,5 +31,3 @@ car_brands = [Toyota,
 
 for car_brand in car_brands:
     admin.site.register(car_brand)
-
-

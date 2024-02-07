@@ -166,7 +166,7 @@ class Chevrolet(BaseModel):
     def __str__(self):
         return self.title
 
-    
+
 class CarModel(BaseModel):
     toyota = models.ForeignKey(Toyota, on_delete=models.CASCADE, related_name='toyota_passenger_cars')
     honda = models.ForeignKey(Honda, on_delete=models.CASCADE, related_name='honda_passenger_cars')
